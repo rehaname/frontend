@@ -5,7 +5,7 @@ import axios from 'axios'
 
 class Main extends Component {
     click() {
-        axios.get("http://localhost:8080/sample").then(res => {
+        axios.get("http://localhost:8888/sample").then(res => {
             console.log(res);
             alert("Received Successful response from server!");
             this.setState({clickMessage: res.data});
