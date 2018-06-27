@@ -18,7 +18,7 @@ pipeline {
             steps {
                 dir("."){
                     sh "rm -rf build"
-                    sh "npm build"
+                    sh "npm run build"
                     sh "docker build . -t hamster-ui:1.0.0.${env.BUILD_ID}"
                 }
             }
