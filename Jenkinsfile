@@ -10,29 +10,24 @@ pipeline {
         stage('Install') {
             steps {
                 dir("."){
-                    sh '. ~/.bashrc && npm install'
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                dir("."){
-                    sh '. ~/.bashrc && npm test'
+                    sh 'npm install'
                 }
             }
         }
         stage('Publish') {
             steps {
                 dir("."){
-                    sh ". ~/.bashrc && docker build . -t hamster-ui:1.0.0.${env.BUILD_ID}"
+                    sh "rm -rf build"
+                    sh "npm build"
+                    sh "docker build . -t hamster-ui:1.0.0.${env.BUILD_ID}"
                 }
             }
         }
         stage('Deploy') {
             steps {
                 dir("."){
-                    sh ". ~/.bashrc && export VERSION=1.0.0.${env.BUILD_ID} && docker-compose down"
-                    sh ". ~/.bashrc && export VERSION=1.0.0.${env.BUILD_ID} && docker-compose up -d"
+                    sh "VERSION=1.0.0.${env.BUILD_ID} && docker-compose down"
+                    sh "VERSION=1.0.0.${env.BUILD_ID} && docker-compose up -d"
                 }
             }
         }
