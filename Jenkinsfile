@@ -26,8 +26,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 dir("."){
-                    sh "VERSION=1.0.0.${env.BUILD_ID} && docker-compose down"
-                    sh "VERSION=1.0.0.${env.BUILD_ID} && docker-compose up -d"
+                    sh "VERSION=1.0.0.${env.BUILD_ID} docker-compose down"
+                    sh "VERSION=1.0.0.${env.BUILD_ID} docker-compose up -d"
                 }
             }
         }
