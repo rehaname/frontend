@@ -1,0 +1,6 @@
+version: '3'
+services:
+    hamster-ui:
+        image: hamster-ui:$VERSION
+        ports:
+            - "8000:80"
