@@ -30,7 +30,7 @@ class Main extends Component {
                 <p className="App-intro">
                     <div>
                         <Button onClick={this.click} type="primary">Button</Button>
-                        <div>Clicked?: {this.state.clickMessage}</div>
+                        <div>Clicked??: {this.state.clickMessage}</div>
                     </div>
                 </p>
             </div>
