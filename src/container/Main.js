@@ -5,7 +5,7 @@ import axios from 'axios'
 
 class Main extends Component {
     click() {
-        axios.get("http://localhost:8888/sample").then(res => {
+        axios.get("http://localhost:8089/sample").then(res => {
             console.log(res);
             alert("Received Successful response from server!");
             this.setState({clickMessage: res.data});
@@ -25,7 +25,7 @@ class Main extends Component {
         return (
             <div className="Main">
                 <header className="App-header">
-                    <h1 className="App-title">GSP ITS Passion Project</h1>
+                    <h1 className="App-title">Hamster</h1>
                 </header>
                 <p className="App-intro">
                     <div>
