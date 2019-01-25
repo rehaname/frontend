@@ -5,9 +5,15 @@
   "dependencies": {
     "antd": "^3.10.1",
     "axios": "^0.18.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-scripts": "1.1.4"
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-redux": "^6.0.0",
+    "react-redux-form": "^1.16.12",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.4",
+    "redux": "^4.0.1",
+    "redux-form": "^8.1.0",
+    "redux-form-website-template": "^1.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
