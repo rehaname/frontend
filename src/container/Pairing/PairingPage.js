@@ -1,8 +1,8 @@
-import { reduxForm, FieldArray } from "redux-form";
+import { reduxForm, FieldArray, Field } from "redux-form";
 import { Form, Input, Button, Icon } from 'antd';
+import { TextField } from 'redux-form-antd';
 import React from "react";
 import submit from "./CreateMatrix";
-import CreateMatrixButton from "./CreateMatrixButton";
 
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
     <div>
@@ -23,17 +23,16 @@ const renderMembers = ({ fields, meta: { touched, error, submitFailed } }) => (
                 <Form.Item
                     key={index}
                     label="Member's Name"
-                    name={`${member}.firstName`}
                     component={renderField}
                     labelCol={{ span: 5 }}
                     wrapperCol={{ span: 11 }}
                 >
-                    <Input />
                     <Icon
                         type="minus-circle-o"
                         title="Remove Member"
                         onClick={() => fields.remove(index)}
                     />
+                    <Field name={`${member}.name`} component={TextField} /> 
                 </Form.Item>
             </Form.Item>
         ))}
@@ -43,30 +42,28 @@ const renderMembers = ({ fields, meta: { touched, error, submitFailed } }) => (
 const Pairing = props => {
     const { handleSubmit, pristine, reset, submitting } = props;
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit(submit)}>
             <Form.Item
                 label="Iteration Name"
-                name="iterationName"
                 component={renderField}
                 labelCol={{ span: 5 }}
                 wrapperCol={{ span: 11 }}
             >
-                <Input />
+                <Field name="iterationName" component={TextField} />
             </Form.Item>
             <FieldArray name="members" component={renderMembers} />
             <div>
-                {/* <Button type="submit" disabled={submitting}>Submit</Button> */}
-                <Button type="button" disabled={pristine || submitting} onClick={reset}>
+                <Button type="primary" htmlType="submit" disabled={submitting}>Create Matrix</Button>&nbsp;
+                <Button type="primary" disabled={pristine || submitting} onClick={reset}>
                     Clear Values
           </Button>
+                {/* &nbsp;
+                <CreateMatrixButton /> */}
             </div>
-            <CreateMatrixButton />
         </Form>
     );
 };
 
-
 export default reduxForm({
-    form: "pairingForm",
-    onSubmit: submit
+    form: "pairingForm"
 })(Pairing);
