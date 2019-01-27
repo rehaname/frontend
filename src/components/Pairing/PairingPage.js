@@ -1,5 +1,5 @@
 import { reduxForm, FieldArray, Field } from "redux-form";
-import { Form, Input, Button, Icon } from 'antd';
+import { Form, Button, Icon } from 'antd';
 import { TextField } from 'redux-form-antd';
 import React from "react";
 import submit from "./CreateMatrix";
@@ -15,14 +15,13 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 );
 
 const renderMembers = ({ fields, meta: { touched, error, submitFailed } }) => (
-    <ul>
+    <div>
         <Button type="button" onClick={() => fields.push({})} >Add Member</Button>
         {(touched || submitFailed) && error && <span>{error}</span>}
         {fields.map((member, index) => (
             <Form.Item key={index}>
                 <Form.Item
                     key={index}
-                    label="Member's Name"
                     component={renderField}
                     labelCol={{ span: 5 }}
                     wrapperCol={{ span: 11 }}
@@ -32,11 +31,11 @@ const renderMembers = ({ fields, meta: { touched, error, submitFailed } }) => (
                         title="Remove Member"
                         onClick={() => fields.remove(index)}
                     />
-                    <Field name={`${member}.name`} component={TextField} /> 
+                    <Field name={`${member}.name`} component={TextField} placeholder="Member's Name" />
                 </Form.Item>
             </Form.Item>
         ))}
-    </ul>
+    </div>
 );
 
 const Pairing = props => {
