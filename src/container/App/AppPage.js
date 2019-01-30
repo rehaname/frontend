@@ -1,33 +1,21 @@
 import React, { Component } from 'react';
-import '../css/App.css';
+import '../../css/App.css';
 import { Layout, Menu, Avatar, Icon } from 'antd';
 import { Route, NavLink, Switch } from 'react-router-dom';
-import Pairing from "./Pairing/PairingPage";
-import Home from "./Home/HomePage";
+import Pairing from "../Pairing/PairingPage";
+import Home from "../Home/HomePage";
+import * as AppActions from "./AppActions";
+import { connect } from "react-redux";
 
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
-class Main extends Component {
-    state = {
-        collapsed: true,
-    };
-
-    onCollapse = (collapsed) => {
-        console.log(collapsed);
-        this.setState({ collapsed });
-    }
-
-    constructor(props) {
-        super(props);
-        this.state = { mainMessage: 'Main Page' }
-    };
-
+class AppPage extends Component {
     render() {
         return (
             <Switch>
                 <Layout style={{ minHeight: '100vh' }}>
-                    <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} theme='light'>
+                    <Sider collapsible collapsed={this.props.collapsed} onCollapse={this.props.onCollapse()} theme='light'>
                         <br />
                         <div>
                             <Avatar shape="square" size="large" icon="user" />
@@ -87,4 +75,17 @@ class Main extends Component {
         );
     };
 }
-export default Main;
+
+function mapStateToProps(state) {
+    return {
+        collapsed: state.collapseApp.collapsed
+    };
+}
+
+const mapDispatchToProps = dispatch => ({
+    onCollapse() {
+        dispatch(AppActions.onAppCollapse());
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppPage);
