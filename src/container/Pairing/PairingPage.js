@@ -4,28 +4,7 @@ import { TextField } from 'redux-form-antd';
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as PairingActions from "./PairingActions";
-
-const columns = [{
-    dataIndex: 'name'
-},
-{
-    title: 'Kat'
-}, {
-    title: 'Kat1'
-}, {
-    title: 'Kat2'
-}];
-
-const data = [{
-    key: '1',
-    name: 'Kat2'
-}, {
-    key: '2',
-    name: 'Kat1'
-}, {
-    key: '3',
-    name: 'Kat',
-}];
+import { clone, shuffle } from "lodash";
 
 
 class PairingPage extends Component {
@@ -67,16 +46,29 @@ class PairingPage extends Component {
         </div>
     );
 
-    matrix() {
+    createMatrix = () => {
+        const pairings = this.props.state.pairings;
         return (
-            <Table columns={columns} dataSource={data} />
+            <Table columns={pairings.columns} dataSource={pairings.rows.reverse()} bordered />
         );
+    }
+
+    generatePairs = () => {
+        const rows = this.props.state.pairings.rows;
+        var newRows = clone(rows),
+            shuffledRows = shuffle(newRows);
+
+        var pairedRows = shuffledRows.reduce(function (result, value, index, array) {
+            if (index % 2 === 0) {
+                result.push(array.slice(index, index + 2));
+            } 
+            return result;
+        }, []);
+        console.log(pairedRows);
     }
 
     render() {
         const { handleSubmit, pristine, reset, submitting } = this.props;
-        console.log(this.props.submitSucceeded);
-        console.log('asdjahsjdkhasd');
         return (
             <Form onSubmit={handleSubmit}>
                 <Form.Item
@@ -94,10 +86,8 @@ class PairingPage extends Component {
                         Clear Values
           </Button>
                 </div>
-                {this.props.submitSucceeded
-                    ? <this.matrix />
-                    : null
-                }
+                {this.props.submitSucceeded ? this.createMatrix() : null}
+                {this.props.submitSucceeded ? this.generatePairs() : null}
             </Form>);
     }
 }
@@ -112,7 +102,9 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
     onSubmit(values) {
         dispatch(PairingActions.addNewMatrix(values));
-        alert(`You submitted:\n\n${JSON.stringify(values, null, 2)}`);
+        Object.entries(values.members).forEach(([key, value]) =>
+            dispatch(PairingActions.mapMembersToTable(value))
+        );
     }
 });
 
