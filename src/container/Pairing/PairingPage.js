@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import * as PairingActions from "./PairingActions";
 import { clone, shuffle } from "lodash";
 
-
 class PairingPage extends Component {
     constructor() {
         super();
@@ -54,17 +53,10 @@ class PairingPage extends Component {
     }
 
     generatePairs = () => {
-        const rows = this.props.state.pairings.rows;
-        var newRows = clone(rows),
-            shuffledRows = shuffle(newRows);
-
-        var pairedRows = shuffledRows.reduce(function (result, value, index, array) {
-            if (index % 2 === 0) {
-                result.push(array.slice(index, index + 2));
-            } 
-            return result;
-        }, []);
-        console.log(pairedRows);
+        const pairings = this.props.state.pairings;
+        return (
+            <Table columns={pairings.pairingColumn} dataSource={pairings.pairingRows} bordered size="small" />
+        );
     }
 
     render() {
@@ -72,12 +64,10 @@ class PairingPage extends Component {
         return (
             <Form onSubmit={handleSubmit}>
                 <Form.Item
-                    label="Iteration Name"
                     component={this.renderField}
-                    labelCol={{ span: 5 }}
                     wrapperCol={{ span: 11 }}
                 >
-                    <Field name="iterationName" component={TextField} />
+                    <Field name="iterationName" component={TextField} placeholder="Iteration Name" />
                 </Form.Item>
                 <FieldArray name="members" component={this.renderMembers} />
                 <div>
@@ -86,8 +76,9 @@ class PairingPage extends Component {
                         Clear Values
           </Button>
                 </div>
-                {this.props.submitSucceeded ? this.createMatrix() : null}
+                < br />
                 {this.props.submitSucceeded ? this.generatePairs() : null}
+                {this.props.submitSucceeded ? this.createMatrix() : null}
             </Form>);
     }
 }
@@ -99,12 +90,23 @@ function mapStateToProps(state) {
     };
 }
 
+function getShuffledRows(members) {
+    var newRows = clone(members),
+        shuffledRows = shuffle(newRows);
+    return shuffledRows;
+}
+
 const mapDispatchToProps = dispatch => ({
     onSubmit(values) {
         dispatch(PairingActions.addNewMatrix(values));
         Object.entries(values.members).forEach(([key, value]) =>
             dispatch(PairingActions.mapMembersToTable(value))
         );
+        getShuffledRows(values.members).reduce(function (result, value, index, array) {
+            if (index % 2 === 0) {
+                dispatch(PairingActions.mapPairsToTable(array.slice(index, index + 2)));
+            }
+        }, []);
     }
 });
 
