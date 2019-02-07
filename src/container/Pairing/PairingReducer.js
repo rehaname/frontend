@@ -17,8 +17,12 @@ const initialState = {
     pairingRows: []
 }
 
-function getSecondPair(data) {
-    return typeof data[1] != 'undefined' ? data[1].name : '';
+function updateMatrixRow(state, data) {
+    var obj = state.rows.find(function (element) {
+        return element.name === data.name
+    });
+    obj[data.name1] = 1;
+    return obj;
 }
 
 function pairings(state = initialState, action) {
@@ -31,18 +35,14 @@ function pairings(state = initialState, action) {
         case MAP_MEMBERS_TO_TABLE:
             return {
                 ...state,
-                columns: [...state.columns, {
-                    title: action.data.name
-                }],
-                rows: [...state.rows, action.data]
+                columns: [...state.columns, action.data.column],
+                rows: [...state.rows, action.data.row]
             };
         case MAP_PAIRS_TO_TABLE:
+            updateMatrixRow(state, action.data);
             return {
                 ...state,
-                pairingRows: [...state.pairingRows, {
-                    name: action.data[0].name,
-                    name1: getSecondPair(action.data)
-                }]
+                pairingRows: [...state.pairingRows, action.data]
             }
         default:
             return state;
