@@ -4,6 +4,7 @@ import { Layout, Menu, Avatar, Icon } from 'antd';
 import { Route, NavLink, Switch } from 'react-router-dom';
 import Pairing from "../Pairing/PairingPage";
 import Home from "../Home/HomePage";
+import TechDebt from "../TechDebt/TechDebtPage"
 import * as AppActions from "./AppActions";
 import { connect } from "react-redux";
 
@@ -45,33 +46,36 @@ class AppPage extends Component {
                                 <Menu.Item key="6">
                                     <NavLink to="/pairing">Pairing Matrix</NavLink>
                                 </Menu.Item>
-                                <Menu.Item key="7">Tech Debt</Menu.Item>
-                                <Menu.Item key="8">Code Review Changes</Menu.Item>
+                                <Menu.Item key="7">
+                                    <NavLink to="/techDebt">Tech Debt</NavLink>
+                                </Menu.Item>
+                            <Menu.Item key="8">Code Review Changes</Menu.Item>
                             </SubMenu>
-                            <Menu.Item key="teammenu">
-                                <Icon type="smile" />
-                                <span>The Team</span>
-                            </Menu.Item>
+                        <Menu.Item key="teammenu">
+                            <Icon type="smile" />
+                            <span>The Team</span>
+                        </Menu.Item>
                         </Menu>
                     </Sider>
-                    <Layout>
-                        <Header style={{ background: '#fff', padding: 0 }}>
-                            <div>ITS/GSP</div>
-                        </Header>
-                        <Content style={{ margin: '24px 16px 0' }}>
-                            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-                                <div>
-                                    <Route exact path="/" component={Home} />
-                                    <Route path="/pairing" component={Pairing} />
-                                </div>
+                <Layout>
+                    <Header style={{ background: '#fff', padding: 0 }}>
+                        <div>ITS/GSP</div>
+                    </Header>
+                    <Content style={{ margin: '24px 16px 0' }}>
+                        <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+                            <div>
+                                <Route exact path="/" component={Home} />
+                                <Route path="/pairing" component={Pairing} />
+                                <Route path="/techDebt" component={TechDebt} />
                             </div>
-                        </Content>
-                        <Footer style={{ textAlign: 'center' }}>
-                            Hamster ©2018 Created by ITS-GSP
+                        </div>
+                    </Content>
+                    <Footer style={{ textAlign: 'center' }}>
+                        Hamster ©2018 Created by ITS-GSP
                         </Footer>
-                    </Layout>
                 </Layout>
-            </Switch>
+                </Layout>
+            </Switch >
         );
     };
 }
