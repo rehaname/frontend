@@ -27,20 +27,36 @@ class PairingPage extends Component {
         </div>
     );
 
+    getIndices(pair, pairingMatrixRows, pairingMatrixCols) {
+        let rowToColNameIndex = pairingMatrixRows.findIndex(a => a.name === pair.name),
+            rowToColName1Index = pairingMatrixCols.findIndex(a => a.title === pair.name1);
+        let colToRowNameIndex = pairingMatrixRows.findIndex(a => a.name === pair.name1),
+            colToRowName1Index = pairingMatrixRows.findIndex(a => a.name === pair.name);
+        let rowToColTotalIndex = rowToColNameIndex + rowToColName1Index,
+            colToRowTotalIndex = colToRowNameIndex + colToRowName1Index;
+
+        return {
+            rowToColTotal: rowToColTotalIndex,
+            colToRowTotal: colToRowTotalIndex,
+            rowToColNameIndex: rowToColNameIndex,
+            rowToColName1Index: rowToColName1Index
+        };
+    }
+
     createMatrix = () => {
-        const pairingsData = this.props.state.pairings,
+        let pairingsData = this.props.state.pairings,
             pairs = pairingsData.pairingRows,
             pairingMatrixRows = clone(pairingsData.rows).reverse(),
-            pairingMatrixCols = clone(pairingsData.columns);
+            pairingMatrixCols = clone(pairingsData.columns),
+            me = this;
         pairingMatrixCols.shift();
         pairs.forEach(function (pair) {
             if (pair.name1 !== '') {
-                const nameIndex = pairingMatrixRows.findIndex(a => a.name === pair.name),
-                    name1Index = pairingMatrixCols.findIndex(a => a.title === pair.name1);
-                if (((nameIndex === name1Index && name1Index < 2) || (nameIndex < name1Index) && name1Index !== pairingMatrixCols.length - 1) || name1Index === 0) {
-                    pairingMatrixRows[nameIndex][pair.name1] = 1;
+                let indicesObj = me.getIndices(pair, pairingMatrixRows, pairingMatrixCols);
+                if (indicesObj.rowToColTotal < indicesObj.colToRowTotal) {
+                    pairingMatrixRows[indicesObj.rowToColNameIndex][pair.name1] = 1;
                 } else {
-                    pairingsData.rows[name1Index][pair.name] = 1;
+                    pairingsData.rows[indicesObj.rowToColName1Index][pair.name] = 1;
                 }
             }
         });
@@ -53,7 +69,7 @@ class PairingPage extends Component {
     generatePairs = () => {
         const pairingsData = this.props.state.pairings;
         return (
-            <Table columns={pairingsData.pairingColumn} dataSource={pairingsData.pairingRows} bordered size="small" />
+            <Table columns={pairingsData.pairingColumn} dataSource={pairingsData.pairingRows} size="small" bordered />
         );
     }
 
@@ -88,7 +104,7 @@ function mapStateToProps(state) {
 }
 
 function getShuffledRows(members) {
-    var newRows = clone(members),
+    let newRows = clone(members),
         shuffledRows = shuffle(newRows);
     return shuffledRows;
 }
@@ -97,7 +113,7 @@ const mapDispatchToProps = dispatch => ({
     onSubmit(values) {
         dispatch(PairingActions.addNewMatrix(values));
         Object.entries(values.members).forEach(([key, value]) => {
-            var reversed = clone(values.members).reverse(),
+            let reversed = clone(values.members).reverse(),
                 obj = { name: value };
             obj.reversedName = reversed[key];
             dispatch(PairingActions.mapMembersToTable(value));
