@@ -17,14 +17,6 @@ const initialState = {
     pairingRows: []
 }
 
-function updateMatrixRow(state, data) {
-    var obj = state.rows.find(function (element) {
-        return element.name === data.name
-    });
-    obj[data.name1] = 1;
-    return obj;
-}
-
 function pairings(state = initialState, action) {
     switch (action.type) {
         case ADD_NEW_MATRIX:
@@ -39,7 +31,6 @@ function pairings(state = initialState, action) {
                 rows: [...state.rows, action.data.row]
             };
         case MAP_PAIRS_TO_TABLE:
-            updateMatrixRow(state, action.data);
             return {
                 ...state,
                 pairingRows: [...state.pairingRows, action.data]
