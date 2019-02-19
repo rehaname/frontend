@@ -1,4 +1,4 @@
-import { ADD_NEW_MATRIX, MAP_MEMBERS_TO_TABLE, MAP_PAIRS_TO_TABLE } from "./PairingActions"
+import { ADD_NEW_MATRIX, MAP_MEMBERS_TO_TABLE, ADD_NEW_PAIR } from "./PairingActions"
 
 const initialState = {
     data: [],
@@ -30,7 +30,7 @@ function pairings(state = initialState, action) {
                 columns: [...state.columns, action.data.column],
                 rows: [...state.rows, action.data.row]
             };
-        case MAP_PAIRS_TO_TABLE:
+        case ADD_NEW_PAIR:
             return {
                 ...state,
                 pairingRows: [...state.pairingRows, action.data]

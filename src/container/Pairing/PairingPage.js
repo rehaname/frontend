@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as PairingActions from "./PairingActions";
 import { clone, shuffle } from "lodash";
+import EditableCellAndFormRow from "../../components/EditableCellAndFormRow";
 
 class PairingPage extends Component {
     renderMembers = ({ fields, meta: { touched, error, submitFailed } }) => (
@@ -62,14 +63,19 @@ class PairingPage extends Component {
         });
 
         return (
-            <Table columns={pairingsData.columns} dataSource={pairingMatrixRows} bordered />
+            <Table columns={pairingsData.columns} dataSource={pairingMatrixRows} bordered rowSelection={this.props.onSelect()} />
         );
     }
 
     generatePairs = () => {
         const pairingsData = this.props.state.pairings;
         return (
-            <Table columns={pairingsData.pairingColumn} dataSource={pairingsData.pairingRows} size="small" bordered />
+            <Table
+                // components={EditableCellAndFormRow}
+                columns={pairingsData.pairingColumn}
+                dataSource={pairingsData.pairingRows}
+                // rowClassName="editable-row"
+                size="small" bordered />
         );
     }
 
@@ -109,6 +115,18 @@ function getShuffledRows(members) {
     return shuffledRows;
 }
 
+// const rowSelection = {
+//     onChange: (selectedRowKeys, selectedRows) => {
+//         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows, 'ONCHANGE');
+//     },
+//     onSelect: (record, selected, selectedRows) => {
+//         console.log(record, selected, selectedRows, 'ONSELECT');
+//     },
+//     onSelectAll: (selected, selectedRows, changeRows) => {
+//         console.log(selected, selectedRows, changeRows, 'ONSELECTALL');
+//     }
+// };
+
 const mapDispatchToProps = dispatch => ({
     onSubmit(values) {
         dispatch(PairingActions.addNewMatrix(values));
@@ -120,9 +138,13 @@ const mapDispatchToProps = dispatch => ({
         });
         getShuffledRows(values.members).reduce(function (result, value, index, array) {
             if (index % 2 === 0) {
-                dispatch(PairingActions.mapPairsToTable(array.slice(index, index + 2)));
+                // dispatch(PairingActions.mapPairsToTable(array.slice(index, index + 2)));
+                dispatch(PairingActions.saveNewPair(array.slice(index, index + 2)));
             }
         }, []);
+    },
+    onSelect(values) {
+        console.log("ajdhkjashdjkhadhasldha");
     }
 });
 
